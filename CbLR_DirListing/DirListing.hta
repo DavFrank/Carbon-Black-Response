@@ -1,0 +1,190 @@
+<!-- 
+=======================================================================================================
+Description : 
+
+Version : 1.0
+Developed by: David Frank - 11/18/19
+=======================================================================================================
+-->
+
+<head>                                                                                                                 
+ <title>Directory Listing - CbLR</title>
+ <HTA:APPLICATION
+   ID=oHTA
+   ApplictionName = "CbR"
+   Icon           = "images/Windows.ico"
+   MaximizeButton = "No"
+   Scroll         = "No"
+   SingleInstance = "Yes"
+   WindowState    = "Normal"
+ >
+</head>
+
+<style>
+BODY
+
+.button
+{
+   font-family: arial;
+   font-size: 8pt;
+   width: 92px;
+}
+
+input
+{
+   font-family: arial;
+   font-size: 9pt;
+}
+
+td
+{
+   font-family: arial;
+   font-size: 9pt;
+}
+
+textarea
+{
+   font-family: arial;
+   font-size: 8pt;
+}
+
+select
+{
+   font-family: arial;
+   font-size: 9pt;
+}
+
+.auto-style1 {
+	font-size: x-small;
+	text-align: right;
+	font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+.auto-style2 {
+	color: #FFFF00;
+}
+
+</style>
+
+<Script Language="VBScript">
+
+'=========================================================================
+' Variable Definitions
+'=========================================================================
+    Dim objFSO, wshShell
+
+	Set objFSO = CreateObject("Scripting.FileSystemObject")
+	Set wshShell= CreateObject("WScript.Shell")
+	Dim Quotes : Quotes	= chr(34)
+	Dim strType
+	Const ForReading = 1
+	Const ForWriting = 2
+	Const DeleteReadOnly = True
+
+'=========================================================================
+'GUI Body
+'=========================================================================
+
+	Dim x,y
+	x = (window.screen.width - 600) / 2
+	y = (window.screen.height - 375) / 2
+	If x < 0 Then x = 0
+	If y < 0 Then y = 0
+	Window.ReSizeTo 600,375
+	window.moveTo x,y
+
+'=========================================================================
+' Main Body
+'=========================================================================
+
+Sub MainRoutine()
+
+' Check to make sure all values have been entered
+	If HostName.Value = "" or UserFolder.Value = "" Then
+		MsgBox "PLease enter values for all fields!."
+		Exit Sub		
+	End If
+
+' Determine where script is running from
+	FullName = replace(oHTA.commandLine,chr(34),"")  
+	arrFN=split(FullName,"\")  
+	FileName = arrFN(ubound(arrFN))  
+	strScriptLocation=replace(FullName,FileName,"")
+
+' Retrieve values from form
+
+	strHostname = HostName.Value
+    strUserFolder = UserFolder.Value
+
+
+    strcmd = "python " & strScriptLocation & "DirListing.py " & strHostname & " " & strUserFolder
+'    msgbox strcmd
+    wshShell.currentdirectory = strScriptLocation
+    sReturn = wshShell.Run(strcmd, 1, True)
+
+	ffExit()
+
+End Sub
+
+'****************************************************************************************
+'* Exit the script
+'****************************************************************************************
+Function ffExit()
+	Window.close()
+End Function
+
+'****************************************************************************************
+'* Clear Text on Form
+'****************************************************************************************
+Sub ClearText
+  Hostname.Value = ""
+  UserFolder.Value = ""
+End Sub 'ClearText
+
+'****************************************************************************************
+'* Get Date 
+'****************************************************************************************
+</Script>
+</Script>
+
+
+<BODY style="font:8pt arial; background-image=url('images/cues_bg.jpg');color=white" >
+
+    <H1>
+        <p style="text-align: center">
+            <b><font size="5">
+            <img border="0" src="Images/CB.jfif" width="55" height="55" align="left">
+            User Profile Directory Listing via CbLR <br> <br>
+            </font></b> 
+        </p>
+    </H1>
+
+    <table border="0" align="LEFT" cellspacing="10" style="height: 166px">
+        <tr>
+          <td >Computer Name:<td>
+            <input type="text" name="Hostname" size="24" Value="MachineName" onClick="ClearText" >
+          </td>
+        </tr>
+
+        <tr>
+          <td >UserFolder:</td>
+          <td >
+            <input type="text" name="UserFolder" size="24" >
+          </td>
+        </tr>
+
+
+        <tr>
+          <td></td>
+          <td>
+            <input id=RunButton3 class="button" type="button" value="Retrieve Data" name="RunButton3" onClick="MainRoutine">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input id=ExitButton class="button" type="button" value="Exit" name="ExitButton " onClick="ffExit">
+          </td>
+        </tr>
+    </table>
+
+    <div style="position: absolute; width: 510px; height: 22px; z-index: 3; left: 52px; top: 314px; visibility:visible" id="layer2">
+    	<p class="auto-style1">Created on 11/18/19 by
+    	<span class="auto-style2">David Frank </span>- v1.0</p>
+    </div>
+		
+</body>

@@ -1,0 +1,10 @@
+{
+	"powershell": {
+		"surveyor_query": [
+			" -(username:DFrank)"
+		],
+		"process_name": [
+			"powershell.exe"
+		]
+	}
+}

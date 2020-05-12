@@ -1,0 +1,10 @@
+{
+    "Domain": {
+        "surveyor_query": [
+            " -(username:DFrank)"
+        ],
+        "netconn_domain": [
+            "Google.com"
+        ]
+    }
+}
